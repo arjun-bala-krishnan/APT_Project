@@ -1,0 +1,2 @@
+1) command to convert ui files to py files: pyuic5 -x Ui_APTMainWindow.ui -o Ui_APTMainWindow.py
+2) command to convert qrc files to py files: pyrcc5 UI\UI_APTMainWindow_Images.qrc -o UI_APTMainWindow_Images.py
