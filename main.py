@@ -47,6 +47,7 @@ class Manager:
         self.first.show()
 
 
+# Start of main
 def main():
     app = QApplication(sys.argv)
     manager = Manager()
