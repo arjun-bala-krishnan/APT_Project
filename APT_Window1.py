@@ -7,10 +7,30 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
 from UI import Ui_APTMainWindow
 import common
-
+import numpy as np
 # Functions defined in the common class
 show_message = common.show_message
 
+
+def plot_hist(df_apt, bins, xlim_left, xlim_right, save=True):
+    bins_save = bins
+    num_bins = int((1 / bins) * np.max(df_apt["MN_Ratio"]))
+    freq, bins = np.histogram(df_apt["MN_Ratio"], bins=num_bins)
+
+    df_apt_hist = pd.DataFrame(list(zip(bins[:-1], bins[:-1], freq)),
+                               columns=['bin_lower', 'bin_upper', 'freq'])
+
+    subset_df_apt_hist = df_apt_hist[df_apt_hist["bin_lower"] > float(xlim_left)]
+    subset_df_apt_hist = subset_df_apt_hist[subset_df_apt_hist["bin_lower"] < float(xlim_right)]
+
+    plt.figure(figsize=(10, 10), dpi=80, facecolor='w', edgecolor='k')
+    plt.title('APT Spectrum')
+    plt.xlabel('MN_Ratio')
+    plt.ylabel('Counts')
+    plt.bar(subset_df_apt_hist.bin_lower, subset_df_apt_hist.freq,
+            width=subset_df_apt_hist.bin_upper - subset_df_apt_hist.bin_lower, ec="k", align="edge")
+    if save is True:
+        plt.savefig("Spectrum_" + str(xlim_left) + "_" + str(xlim_right) + ".png")
 
 class DataFrameModel(QtCore.QAbstractTableModel):
     DtypeRole = QtCore.Qt.UserRole + 1000
