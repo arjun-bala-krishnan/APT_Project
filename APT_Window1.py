@@ -7,10 +7,20 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
 from UI import Ui_APTMainWindow
 import common
+import numpy as np
 
 # Functions defined in the common class
 show_message = common.show_message
 
+def make_hist(df_apt, bin_ratio = 0.001):
+    bin_size = 1/bin_ratio
+    num_bins = int(bin_size * np.max(df_apt["MN_Ratio"]))
+    freq, bins = np.histogram(df_apt["MN_Ratio"], bins = num_bins)
+    df_apt_hist = pd.DataFrame(list(zip(bins[:-1], bins[:-1], freq)),
+                   columns =['bin_lower', 'bin_upper', 'freq'])
+    df_apt_hist['bin_lower'] = df_apt_hist['bin_lower'].apply(lambda x: float(int(x*bin_size)/bin_size))
+    df_apt_hist['bin_upper'] = df_apt_hist['bin_upper'].apply(lambda x: float(int(x*bin_size)/bin_size + bin_ratio))
+    return df_apt_hist
 
 class DataFrameModel(QtCore.QAbstractTableModel):
     DtypeRole = QtCore.Qt.UserRole + 1000
