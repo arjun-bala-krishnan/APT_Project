@@ -1,10 +1,11 @@
 import atexit
-import os
+import numpy as np
 import sys
+import pandas as pd
 import APT_Window1
+from silx.gui.widgets.PeriodicTable import PeriodicTable
 
-from IPython.core.display import display
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMessageBox, QTabWidget
 
 import common
 
@@ -38,7 +39,6 @@ def savecounter():
 
 atexit.register(savecounter)
 
-
 # The manager of windows and what happens when Next and Back button are pressed
 class Manager:
 
@@ -49,14 +49,15 @@ class Manager:
 
 # Start of main
 def main():
+    desired_width = 320
+    pd.set_option('display.width', desired_width)
+    np.set_printoptions(linewidth=desired_width)
+    pd.set_option('display.max_columns', 10)
+
     app = QApplication(sys.argv)
     manager = Manager()
-    app.exec_()
 
-    curr_dir = os.getcwd()
-    data_matfile = os.path.join(curr_dir, "Input", "totaldata2.mat")
-    df_apt = common.read_data(data_matfile)
-    display(df_apt)
+    app.exec_()
 
 
 if __name__ == '__main__': main()

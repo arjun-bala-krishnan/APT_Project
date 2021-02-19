@@ -6,6 +6,12 @@ from PyQt5.QtCore import Qt
 from scipy.io import loadmat
 
 
+def superscript(n):
+    return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c) - ord('0')] for c in str(n)])
+
+def subscript(n):
+    return "".join(["₀₁₂₃₄₅₆₇₈₉"[ord(c) - ord('0')] for c in str(n)])
+
 def read_data(data_matfile):
     """
     Reads the MATLAB data containing 4 fields viz., X, Y, Z and MN_Ratio
