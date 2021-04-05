@@ -43,6 +43,9 @@
           <height>30</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Export the final analyzed file for review later</string>
+        </property>
         <property name="text">
          <string>Export Final H5 file</string>
         </property>
@@ -55,6 +58,9 @@
           <width>200</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Input the peak mapped file</string>
         </property>
         <property name="text">
          <string>Input H5 file</string>
@@ -71,16 +77,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2" rowspan="2" colspan="5">
-       <widget class="QWidget" name="widget" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>500</width>
-          <height>500</height>
-         </size>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="3">
        <widget class="QPushButton" name="pushButton_14">
         <property name="minimumSize">
@@ -94,6 +90,9 @@
           <width>200</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Option to add ions to decompose as elements during count</string>
         </property>
         <property name="text">
          <string>Decompose List*</string>
@@ -113,6 +112,9 @@
           <width>200</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>The plot along with the counts are exported as Word report</string>
         </property>
         <property name="text">
          <string>Report of Ion Counts (.docx)</string>
@@ -148,6 +150,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Enter the ion using periodic table</string>
+           </property>
           </widget>
          </item>
          <item row="3" column="1">
@@ -169,6 +174,9 @@
              <width>100</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Min no: of points to form a dense region</string>
            </property>
           </widget>
          </item>
@@ -205,6 +213,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Plot the noises as red or after an invert function</string>
+           </property>
            <property name="text">
             <string>Plot Ions*</string>
            </property>
@@ -223,6 +234,9 @@
              <width>200</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Plot the ion (if exact name exist)</string>
            </property>
            <property name="text">
             <string>Plot Ions</string>
@@ -249,6 +263,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>How close the points should be to be treated as single cluster</string>
+           </property>
           </widget>
          </item>
          <item row="1" column="0" colspan="3">
@@ -264,6 +281,9 @@
              <width>100</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Optional method to remove noises not needed in the ion cloud</string>
            </property>
            <property name="text">
             <string>Noise Removal using DBScan -&gt; (optional*)</string>
@@ -328,12 +348,35 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Plot an envelope of the shape with the outside vertices of the cloud</string>
+           </property>
            <property name="text">
             <string>Plot Convex Hull</string>
            </property>
           </widget>
          </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="radioButton">
+           <property name="toolTip">
+            <string>Possibility to reverse noises and detected clusters</string>
+           </property>
+           <property name="text">
+            <string>Invert DBScan</string>
+           </property>
+          </widget>
+         </item>
         </layout>
+       </widget>
+      </item>
+      <item row="0" column="2" rowspan="3" colspan="5">
+       <widget class="QWidget" name="widget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>500</width>
+          <height>500</height>
+         </size>
+        </property>
        </widget>
       </item>
      </layout>

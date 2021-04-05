@@ -1,2 +1,19 @@
-1) command to convert ui files to py files: pyuic5 -x Ui_APTMainWindow.ui -o Ui_APTMainWindow.py
-2) command to convert qrc files to py files: pyrcc5 UI\UI_APTMainWindow_Images.qrc -o UI_APTMainWindow_Images.py
+Link to github: https://github.com/arjunbkool/APT_Project
+
+
+1) command to convert ui files to py files: 
+
+pyuic5 -x Ui_APTMainWindow.ui -o Ui_APTMainWindow.py
+pyuic5 -x Ui_MonoLayer.ui -o Ui_MonoLayer.py
+pyuic5 -x Ui_AbstractLayer.ui -o Ui_AbstractLayer.py
+pyuic5 -x Ui_SRO.ui -o Ui_SRO.py
+pyuic5 -x Ui_DecomposeList.ui -o Ui_DecomposeList.ui.py
+pyuic5 -x Ui_InputElementTable.ui -o Ui_InputElementTable.py
+pyuic5 -x Ui_PeriodicTable.ui -o Ui_PeriodicTable.py
+pyuic5 -x Ui_CompositionMap.ui -o Ui_CompositionMap.py
+
+When making changes to the APTMainWindow, make sure to change the final line in the corresponding python script generated from the ui file. The change should be "from UI import images_main_rc" instead of just "import images_main_rc" to call the logo correctly.
+
+2) command to convert qrc files to py files (already created. Only needed if there is a new logo): pyrcc5 UI\UI_APTMainWindow_Images.qrc -o images_main_rc.py
+
+

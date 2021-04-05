@@ -85,6 +85,9 @@
                  <height>20</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Bin size increment for histogram plot</string>
+               </property>
               </widget>
              </item>
              <item row="0" column="3">
@@ -106,6 +109,9 @@
                  <width>50</width>
                  <height>20</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Start range of MN ratio</string>
                </property>
               </widget>
              </item>
@@ -135,6 +141,9 @@
                  <width>50</width>
                  <height>20</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>End range of MN ratio</string>
                </property>
               </widget>
              </item>
@@ -167,6 +176,9 @@
                     <width>200</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Plot histogram between given points</string>
                   </property>
                   <property name="text">
                    <string>Plot Histogram</string>
@@ -235,6 +247,9 @@
                  <height>30</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>View first 5 rows of input matlab file</string>
+               </property>
                <property name="text">
                 <string>&lt;- View Input DataFrame</string>
                </property>
@@ -247,6 +262,9 @@
                  <width>200</width>
                  <height>30</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Start binning after completing table</string>
                </property>
                <property name="text">
                 <string>Start Binning</string>
@@ -261,6 +279,9 @@
                  <height>30</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Display the detected peaks as dataframe</string>
+               </property>
                <property name="text">
                 <string>&lt;- Show Peak Dataframe</string>
                </property>
@@ -273,6 +294,9 @@
                  <width>0</width>
                  <height>30</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Show the contents of final dataframe before save</string>
                </property>
                <property name="text">
                 <string>&lt;- Show Final DataFrame</string>
@@ -287,6 +311,9 @@
                  <height>30</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Export final mapped dataframe</string>
+               </property>
                <property name="text">
                 <string>Export as HDF file</string>
                </property>
@@ -299,6 +326,18 @@
                  <width>0</width>
                  <height>30</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Enter ions and their bin parameters in a table</string>
+               </property>
+               <property name="toolTipDuration">
+                <number>-1</number>
+               </property>
+               <property name="statusTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
                </property>
                <property name="text">
                 <string>Input Elements</string>
@@ -333,6 +372,9 @@
                     <width>75</width>
                     <height>30</height>
                    </size>
+                  </property>
+                  <property name="toolTip">
+                   <string/>
                   </property>
                   <property name="layoutDirection">
                    <enum>Qt::LeftToRight</enum>
@@ -376,7 +418,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="images_main.qrc">:/newPrefix/Logo.png</pixmap>
+          <pixmap resource="UI_APTMainWindow_Images.qrc">:/newPrefix/Logo.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -412,6 +454,7 @@
     <addaction name="actionAbstract_Layer_Analysis"/>
     <addaction name="separator"/>
     <addaction name="actionGM_SRO"/>
+    <addaction name="actionComposition_Mapping"/>
    </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuAnalysis"/>
@@ -446,6 +489,9 @@
    <property name="text">
     <string>Mono-Layer Analysis</string>
    </property>
+   <property name="statusTip">
+    <string/>
+   </property>
   </action>
   <action name="actionAbstract_Layer_Analysis">
    <property name="text">
@@ -457,9 +503,15 @@
     <string>GM-SRO</string>
    </property>
   </action>
+  <action name="actionComposition_Mapping">
+   <property name="text">
+    <string>Composition Mapping</string>
+   </property>
+  </action>
  </widget>
  <resources>
-  <include location="images_main.qrc"/>
+  <include location="UI_APTMainWindow_Images.qrc"/>
+  <include location="UI_APTMainWindow_Images.qrc"/>
  </resources>
  <connections/>
 </ui>

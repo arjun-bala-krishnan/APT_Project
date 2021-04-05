@@ -58,6 +58,12 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Enter the miller indices of plane</string>
+           </property>
+           <property name="placeholderText">
+            <string>[0,0,0]</string>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
@@ -99,6 +105,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Enter ion from periodic table</string>
+           </property>
           </widget>
          </item>
          <item row="0" column="2">
@@ -114,6 +123,9 @@
              <width>200</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Plot the specified ion (if the exact name exist)</string>
            </property>
            <property name="text">
             <string>Plot Ions</string>
@@ -159,6 +171,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Enter bin size for layer plane incriments</string>
+           </property>
           </widget>
          </item>
          <item row="0" column="0">
@@ -199,6 +214,9 @@
              <width>100</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Enter distance of plane from origin</string>
            </property>
           </widget>
          </item>
@@ -260,6 +278,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Enter number of mono-layers present in the data</string>
+           </property>
           </widget>
          </item>
          <item row="8" column="1">
@@ -282,6 +303,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>How close the ponts should be to consider as cluster</string>
+           </property>
           </widget>
          </item>
          <item row="2" column="2">
@@ -297,6 +321,9 @@
              <width>100</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Plot the specified plane on the 3D plot</string>
            </property>
            <property name="text">
             <string>Plot Pane</string>
@@ -322,6 +349,9 @@
              <width>100</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>The minimum no: of points to form a dense region</string>
            </property>
           </widget>
          </item>
@@ -377,6 +407,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Plot the ions after DBSCAN to update noises (ignored) in red</string>
+           </property>
            <property name="text">
             <string>Plot Ions*</string>
            </property>
@@ -421,6 +454,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Find layers on the latest plot</string>
+           </property>
            <property name="text">
             <string>Find Layers</string>
            </property>
@@ -445,6 +481,9 @@
              <width>100</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>See the number of ions across each plane in the direction of plane</string>
            </property>
            <property name="text">
             <string>Show Peaks*</string>
@@ -471,6 +510,9 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Show final layer(s) between planes</string>
+           </property>
            <property name="text">
             <string>Plot Layers</string>
            </property>
@@ -493,6 +535,9 @@
           <height>30</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>The completed analysis can be exported as report for later review</string>
+        </property>
         <property name="text">
          <string>Export Final H5 file</string>
         </property>
@@ -512,6 +557,9 @@
           <width>200</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Input the mapped H5 file</string>
         </property>
         <property name="text">
          <string>Input H5 file</string>
@@ -552,6 +600,9 @@
           <height>30</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>To add ions in this list means they will be decomposed in the final count</string>
+        </property>
         <property name="text">
          <string>Decompose List*</string>
         </property>
@@ -570,6 +621,9 @@
           <width>200</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Report with the current plot and counts as Word file</string>
         </property>
         <property name="text">
          <string>Report of Ion Counts (.docx)</string>
