@@ -56,5 +56,17 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.pushButton.setToolTip(_translate("Form", "Option to import table that was previously prepared (csv file)"))
         self.pushButton.setText(_translate("Form", "Import Table"))
+        self.pushButton_2.setToolTip(_translate("Form", "Export the current values into csv file"))
         self.pushButton_2.setText(_translate("Form", "Export Table (.csv)"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())

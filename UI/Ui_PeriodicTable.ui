@@ -79,6 +79,9 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>Option to delete element one by one</string>
+              </property>
               <property name="text">
                <string>&lt;- Del</string>
               </property>
@@ -111,6 +114,9 @@
                 <height>40</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>The inut ion will be displayed here (make sure to follow same name)</string>
+              </property>
              </widget>
             </item>
             <item row="2" column="0">
@@ -136,6 +142,9 @@
                 <width>100</width>
                 <height>20</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>The default charge is zero. Make changes if needed</string>
               </property>
              </widget>
             </item>

@@ -34,6 +34,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QPushButton" name="pushButton">
+           <property name="toolTip">
+            <string>Option to import table that was previously prepared (csv file)</string>
+           </property>
            <property name="text">
             <string>Import Table</string>
            </property>
@@ -41,6 +44,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_2">
+           <property name="toolTip">
+            <string>Export the current values into csv file</string>
+           </property>
            <property name="text">
             <string>Export Table (.csv)</string>
            </property>

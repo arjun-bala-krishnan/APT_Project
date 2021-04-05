@@ -117,7 +117,20 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.pushButton_2.setToolTip(_translate("Form", "Option to delete element one by one"))
         self.pushButton_2.setText(_translate("Form", "<- Del"))
         self.pushButton_4.setText(_translate("Form", "Cancel"))
+        self.lineEdit_3.setToolTip(_translate("Form", "The inut ion will be displayed here (make sure to follow same name)"))
         self.label_2.setText(_translate("Form", "Input Ionic Charge"))
+        self.lineEdit.setToolTip(_translate("Form", "The default charge is zero. Make changes if needed"))
         self.pushButton_5.setText(_translate("Form", "Ok"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())

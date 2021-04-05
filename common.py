@@ -71,13 +71,34 @@ def view_image(image):
     """
     Visualize the image such as png graphs
     :param image: The image read in almost any format
-    :return: Bobe
+    :return: None
     """
     fig = plt.figure(figsize=(18, 16), dpi=80, facecolor='w', edgecolor='k')
     ax = fig.add_subplot(1, 2, 1)
     plt.imshow(image, cmap=plt.cm.gray)
     plt.axis("off")
     plt.show()
+
+
+def bring_df_to_positive_coord(df):
+    """
+        To make all the coordinates ('X', 'Y', 'Z') in the dataset offset by the minimum value and into positive side
+        :param df: pandas.DataFrame
+        :return: pandas.DataFrame
+        """
+    if (df["X"] < 0).any().any():
+        x_offset = abs(df['X'].min())
+        df['X'] = df['X'] + x_offset
+
+    if (df["Y"] < 0).any().any():
+        y_offset = abs(df['Y'].min())
+        df['Y'] = df['Y'] + y_offset
+
+    if (df["Z"] < 0).any().any():
+        z_offset = abs(df['Z'].min())
+        df['Z'] = df['Z'] + z_offset
+
+    return df
 
 
 def print_dataframe_full(df):
