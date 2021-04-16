@@ -217,6 +217,7 @@ class PeriodicTableCustom(Ui_PeriodicTable.Ui_Form, QDialog):
         self.pushButton_2.clicked.connect(self.delete)
         self.pushButton_5.clicked.connect(self.emit_charge)
         self.pushButton_5.clicked.connect(self.accept)
+        self.pushButton_4.clicked.connect(self.reject)
 
     def delete(self):
         text = ""
@@ -255,6 +256,7 @@ class PeriodicTableCustom(Ui_PeriodicTable.Ui_Form, QDialog):
             element_dict['num'].append(elem_num)
             element_dict['mass'].append(elem_mass)
             element_dict['charge'] = [self.emit_charge()]
+
             text = ""
             for i in range(len(element_dict['ion'])):
                 text = text + str(element_dict['ion'][i]) + common.subscript(str(element_dict['num'][i]))
@@ -334,6 +336,16 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
     def submit(self):
         key = None
         for r in range(max_ions):
+            for c in range(1, 4):
+                if c == 1:
+                    key = 'ion'
+                if c == 2:
+                    key = 'num'
+                if c == 3:
+                    key = 'mass'
+                if c == 4:
+                    key = 'charge'
+
             for c in range(1, 6):
                 if c == 1:
                     key = 'peak_MNRatio'
@@ -415,7 +427,6 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
             common.show_message("I/O error")
 
     def import_table(self):
-        csv_file = None
         csv_file, extension = QFileDialog.getOpenFileName(
             self, 'Save File', '.', filter=self.tr("csv file (*.csv)"))
 
@@ -527,8 +538,16 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
 
                 self.PeriodicTableCustom.curr_row = self.row
                 if self.PeriodicTableCustom.exec() == 1:
-                    element_dict['charge'] = []
-                    element_dict['charge'].append(self.PeriodicTableCustom.emit_charge())
+                    element_dict['charge'] = [self.PeriodicTableCustom.emit_charge()]
+
+                    element_dict_array[str(self.row)] = dict()
+                    element_dict_array[str(self.row)]['ion'] = element_dict['ion']
+                    element_dict_array[str(self.row)]['num'] = element_dict['num']
+                    element_dict_array[str(self.row)]['mass'] = element_dict['mass']
+                    element_dict_array[str(self.row)]['charge'] = element_dict['charge']
+
+
+
                     text = ''
                     for i in range(len(element_dict['ion'])):
                         text = text + str(element_dict['ion'][i]) + common.subscript(str(element_dict['num'][i]))
@@ -541,6 +560,17 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
                     self.tableWidget.setItem(self.row, self.col, item)
 
         return super(InputElementTable, self).eventFilter(source, event)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # The window containing 2 lists with provision to add and subtract ions to decompose
