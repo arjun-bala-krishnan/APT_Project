@@ -8,14 +8,20 @@ import sys
 from collections import Counter
 from collections import defaultdict
 from typing import Dict
+import pickle
+import matplotlib.pyplot as plt
+
+import common
+from UI import Ui_APTMainWindow, Ui_InputElementTable, Ui_PeriodicTable, Ui_MonoLayer, Ui_DecomposeList, \
+    Ui_AbstractLayer, Ui_SRO, Ui_CompositionMap
 
 import docx
 import numpy as np
 import pandas as pd
 from IPython.external.qt_for_kernel import QtCore
 from PyQt5 import QtGui
-from PyQt5.QtCore import QEvent
-from PyQt5.QtGui import QCursor
+from PyQt5.QtCore import QEvent, Qt
+from PyQt5.QtGui import QCursor, QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QDialog, QVBoxLayout, QTableWidgetItem, \
     QHeaderView, QLineEdit, QLabel, QDialogButtonBox
 from ase.io import read
@@ -33,11 +39,10 @@ from sklearn.cluster import DBSCAN
 from sklearn.neighbors import KDTree
 
 pd.options.mode.chained_assignment = None
-import matplotlib.pyplot as plt
-
-import common
-from UI import Ui_APTMainWindow, Ui_InputElementTable, Ui_PeriodicTable, Ui_MonoLayer, Ui_DecomposeList, \
-    Ui_AbstractLayer, Ui_SRO, Ui_CompositionMap
+pd.set_option('display.width', 320)
+np.set_printoptions(linewidth=320)
+pd.set_option('display.max_columns', 10)
+pickle.HIGHEST_PROTOCOL = 4
 
 # Functions defined in the common class
 show_message = common.show_message
@@ -46,7 +51,7 @@ show_message = common.show_message
 max_ions = 50
 # The dictionary of ions for global use and update. Each ion will be one element_dict.
 element_dict = {'ion': [], 'num': [], 'mass': [], 'charge': []}
-cutoff_dict = {'peak_MNRatio': float, 'peak_tolerance': float, 'cutoff_bin': float, 'cutoff_height': int,
+cutoff_dict = {'peak_MNRatio': float, 'peak_width': float, 'cutoff_bin': float, 'cutoff_height': int,
                'cutoff_width': int}
 # list of element_dict corresponding to row number
 element_dict_array: Dict[int, dict] = {}
@@ -296,7 +301,7 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
         self.tableWidget.setColumnCount(6)
         self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("ION"))
         self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("peak_MNRatio(Da)"))
-        self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("MNRatio_tolerance(Da)"))
+        self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("MNRatio_width(Da)"))
         self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("cutoff_bin"))
         self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("cutoff_height"))
         self.tableWidget.setHorizontalHeaderItem(5, QTableWidgetItem("cutoff_width"))
@@ -350,7 +355,7 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
                 if c == 1:
                     key = 'peak_MNRatio'
                 if c == 2:
-                    key = 'peak_tolerance'
+                    key = 'peak_width'
                 if c == 3:
                     key = 'cutoff_bin'
                 if c == 4:
@@ -365,7 +370,7 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
 
             cutoff_dict_array[str(r)] = dict()
             cutoff_dict_array[str(r)]['peak_MNRatio'] = cutoff_dict['peak_MNRatio']
-            cutoff_dict_array[str(r)]['peak_tolerance'] = cutoff_dict['peak_tolerance']
+            cutoff_dict_array[str(r)]['peak_width'] = cutoff_dict['peak_width']
             cutoff_dict_array[str(r)]['cutoff_bin'] = cutoff_dict['cutoff_bin']
             cutoff_dict_array[str(r)]['cutoff_height'] = cutoff_dict['cutoff_height']
             cutoff_dict_array[str(r)]['cutoff_width'] = cutoff_dict['cutoff_width']
@@ -373,7 +378,7 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
     def export_table(self):
         csv_file, extension = QFileDialog.getSaveFileName(
             self, 'Save File', '.', filter=self.tr("csv file (*.csv)"))
-        csv_columns = ['ion', 'num', 'mass', 'charge', 'peak_MNRatio', 'peak_tolerance',
+        csv_columns = ['ion', 'num', 'mass', 'charge', 'peak_MNRatio', 'peak_width',
                        'cutoff_bin', 'cutoff_height', 'cutoff_width']
 
         self.submit()
@@ -453,7 +458,7 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
 
                             cutoff_dict_array[str(r)] = dict()
                             cutoff_dict_array[str(r)]['peak_MNRatio'] = (row[4])
-                            cutoff_dict_array[str(r)]['peak_tolerance'] = (row[5])
+                            cutoff_dict_array[str(r)]['peak_width'] = (row[5])
                             cutoff_dict_array[str(r)]['cutoff_bin'] = (row[6])
                             cutoff_dict_array[str(r)]['cutoff_height'] = (row[7])
                             cutoff_dict_array[str(r)]['cutoff_width'] = (row[8])
@@ -483,7 +488,7 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
             for key in cutoff_dict_array:
                 row = int(key)
                 peak_MNRatio = cutoff_dict_array[key]['peak_MNRatio']
-                peak_tolerance = cutoff_dict_array[key]['peak_tolerance']
+                peak_width = cutoff_dict_array[key]['peak_width']
                 cutoff_bin = cutoff_dict_array[key]['cutoff_bin']
                 cutoff_height = cutoff_dict_array[key]['cutoff_height']
                 cutoff_width = cutoff_dict_array[key]['cutoff_width']
@@ -491,9 +496,9 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
                     item_peak = QTableWidgetItem()
                     item_peak.setText(str(peak_MNRatio))
                     self.tableWidget.setItem(row, 1, item_peak)
-                if peak_tolerance:
+                if peak_width:
                     item_peak = QTableWidgetItem()
-                    item_peak.setText(str(peak_tolerance))
+                    item_peak.setText(str(peak_width))
                     self.tableWidget.setItem(row, 2, item_peak)
                 if cutoff_bin:
                     item_cutoff_bin = QTableWidgetItem()
@@ -546,8 +551,6 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
                     element_dict_array[str(self.row)]['mass'] = element_dict['mass']
                     element_dict_array[str(self.row)]['charge'] = element_dict['charge']
 
-
-
                     text = ''
                     for i in range(len(element_dict['ion'])):
                         text = text + str(element_dict['ion'][i]) + common.subscript(str(element_dict['num'][i]))
@@ -560,17 +563,6 @@ class InputElementTable(Ui_InputElementTable.Ui_Form, QDialog):
                     self.tableWidget.setItem(self.row, self.col, item)
 
         return super(InputElementTable, self).eventFilter(source, event)
-
-
-
-
-
-
-
-
-
-
-
 
 
 # The window containing 2 lists with provision to add and subtract ions to decompose
@@ -1873,7 +1865,8 @@ class SRODialog(Ui_SRO.Ui_Dialog, QDialog):
         dist = self.r_star_array
         count = self.r_star_array_count[0:len(dist)]
         plt.title('Nearest Neighbour Chart')
-        plt.stem(dist[0:self.max_shell], count[0:self.max_shell], linefmt='grey', markerfmt='o', use_line_collection=True)
+        plt.stem(dist[0:self.max_shell], count[0:self.max_shell], linefmt='grey', markerfmt='o',
+                 use_line_collection=True)
         plt.show()
 
     # Function to display chosen radius chart and make manual changes if needed
@@ -2813,17 +2806,56 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
         self.actionGM_SRO.triggered.connect(self.GM_SRO)
         self.actionComposition_Mapping.triggered.connect(self.Composition_Mapping)
         self.actionExit.triggered.connect(sys.exit)
-
-        # All the button related operations
         self.start_button_status()
-        self.pushButton.clicked.connect(self.view_df_apt)  # Update source location
-        self.pushButton_2.clicked.connect(self.plot_hist)  # Plot Histogram
-        self.pushButton_3.clicked.connect(self.input_elements)  # Input elements table
-        self.pushButton_4.clicked.connect(self.start_binning)  # Make the dataframe from two dict and map elements here
-        self.pushButton_7.clicked.connect(self.view_df_el)  # View the df elements here
-        self.pushButton_8.clicked.connect(self.view_df_apt_final)  # # View the whole df apt after binning here
-        self.pushButton_5.clicked.connect(self.export_hdf)  # Save the final df_apt as HDF file for further analysis
-        self.pushButton_6.clicked.connect(QtCore.QCoreApplication.instance().quit)  # Exit
+        self.button_operations()
+
+    def button_operations(self):
+        """
+        btn_view_df = Prints the current dataframe
+        btn_plot_hist = Plots Histogram
+        btn_input_elem = Input the elements table
+        btn_start_bin = Peak mapping using input table and bin size
+        btn_export_hdf = Save the final df_apt as HDF file for further analysis
+        btn_exit = Exit
+        btn_view_peak_df = View the df elements here
+        btn_view_final_df = View the whole df apt after binning here
+        """
+        self.btn_plot_hist.clicked.connect(self.plot_hist)
+        self.btn_input_elem.clicked.connect(self.input_elements)
+        self.btn_view_df.clicked.connect(self.view_df_apt)
+        self.btn_start_bin.clicked.connect(self.start_binning)
+        self.btn_view_peak_df.clicked.connect(self.view_df_el)
+        self.btn_view_final_df.clicked.connect(self.view_df_apt_final)
+        self.btn_export_hdf.clicked.connect(self.export_hdf)
+        self.btn_exit.clicked.connect(QtCore.QCoreApplication.instance().quit)
+
+    def start_button_status(self):
+        """   set status of the buttons when program starts before input_file """
+
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.btn_view_df.setEnabled(False)
+        self.btn_plot_hist.setEnabled(False)
+        self.btn_start_bin.setEnabled(False)
+        self.btn_view_peak_df.setEnabled(False)
+        self.btn_view_final_df.setEnabled(False)
+        self.btn_export_hdf.setEnabled(False)
+
+    def input_file(self):
+        """ Shows the Folder browser dialog to input the .mat file  """
+
+        file = QFileDialog.getOpenFileName(self, 'Select Matlab File"',
+                                           os.getcwd(), "Mat files (*.mat)")
+        try:
+            self.mat_file = file[0]
+            self.df_apt = common.read_data(self.mat_file)
+            self.start_button_status()
+            self.btn_view_df.setEnabled(True)
+            self.btn_plot_hist.setEnabled(True)
+            self.btn_start_bin.setEnabled(True)
+
+        except:
+            self.btn_view_df.setEnabled(False)
+            self.btn_start_bin.setEnabled(False)
 
     # The function does cluster analysis through the dataset to color map required elements
     def Composition_Mapping(self):
@@ -2840,19 +2872,10 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
         self.abstract_layer = AbstractLayerDialog()
         self.abstract_layer.show()
 
+    # Opens the SRO Dialog
     def GM_SRO(self):
         self.SRO = SRODialog()
         self.SRO.show()
-
-    # The status of the buttons during program start, before input file is provided
-    def start_button_status(self):
-        self.tableView.horizontalHeader().setStretchLastSection(True)
-        self.pushButton.setEnabled(False)
-        self.pushButton_2.setEnabled(False)
-        self.pushButton_4.setEnabled(False)
-        self.pushButton_7.setEnabled(False)
-        self.pushButton_8.setEnabled(False)
-        self.pushButton_5.setEnabled(False)
 
     # To export the final binned and mapped apt dataset as hdf file for further analysis
     def export_hdf(self):
@@ -2867,35 +2890,52 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
 
             self.df_apt_final.to_hdf(file[0], key='df_apt_final', mode='w')
 
-    # This is to show the Folder browser dialog and assign the mat file location to input variable
-    def input_file(self):
-        file = QFileDialog.getOpenFileName(self, 'Select Matlab File"',
-                                           os.getcwd(), "Mat files (*.mat)")
-        try:
-            self.mat_file = file[0]
-            self.df_apt = common.read_data(self.mat_file)
-            self.start_button_status()
-            self.pushButton.setEnabled(True)
-            self.pushButton_2.setEnabled(True)
-            self.pushButton_4.setEnabled(True)
-
-        except:
-            self.pushButton.setEnabled(False)
-            self.pushButton_4.setEnabled(False)
-
     # To view the columns of the original file input
     def view_df_apt(self):
         self.df_apt = common.read_data(self.mat_file)
-        self.model = DataFrameModel(self.df_apt.head())
+        # self.model = DataFrameModel(self.df_apt.tail())
+
+        self.model = QStandardItemModel()
+        table_title = list(self.df_apt.columns.values)
+        table_title.insert(0, "row_idx")
+        self.model.setHorizontalHeaderLabels(table_title)
+
+        index, row_data = self.df_apt.tail().index.values, self.df_apt.tail().to_numpy()
+        data = np.hstack((index.reshape(len(index), 1), row_data))
+
+        for line in data:
+            row = []
+            for name in line:
+                item = QStandardItem(str(name))
+                item.setEditable(False)
+                row.append(item)
+            self.model.appendRow(row)
+
         self.tableView.setModel(self.model)
         for i in range(self.df_apt.shape[1]):
             self.tableView.horizontalHeader().setSectionResizeMode(i, QHeaderView.ResizeToContents)
 
     # To view the columns of the final binned and mapped apt dataset
     def view_df_apt_final(self):
-        self.model = DataFrameModel(self.df_apt_final.head())
+        # self.model = DataFrameModel(self.df_apt_final.head())
+
+        self.model = QStandardItemModel()
+        table_title = list(self.df_apt_final.columns.values)
+        table_title.insert(0, "row_idx")
+        self.model.setHorizontalHeaderLabels(table_title)
+        index, row_data = self.df_apt_final.tail().index.values, self.df_apt_final.tail().to_numpy()
+        data = np.hstack((index.reshape(len(index), 1), row_data))
+
+        for line in data:
+            row = []
+            for name in line:
+                item = QStandardItem(str(name))
+                item.setEditable(False)
+                row.append(item)
+            self.model.appendRow(row)
+
         self.tableView.setModel(self.model)
-        for i in range(self.df_apt_final.shape[1]):
+        for i in range(self.df_apt.shape[1]):
             self.tableView.horizontalHeader().setSectionResizeMode(i, QHeaderView.ResizeToContents)
 
     # To view the final columns of all elements that were provided as input from the table
@@ -2975,7 +3015,7 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
             else:
                 cutoff_bins = [float(i) for i in self.df_el['cutoff_bin'].values]
                 peak_MNRatio = [float(i) for i in self.df_el['peak_MNRatio'].values]
-                peak_tolerance = [float(i) for i in self.df_el['peak_tolerance'].values]
+                peak_width = [float(i) for i in self.df_el['peak_width'].values]
                 cutoff_height = [int(i) for i in self.df_el['cutoff_height'].values]
                 cutoff_width = [int(i) for i in self.df_el['cutoff_width'].values]
 
@@ -2989,8 +3029,8 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                     self.completed = (class_iter / self.df_el.shape[0]) * 100.0
                     self.progressBar.setValue(self.completed)
                     reciprocal_bins = 1 / cutoff_bins[class_iter]
-                    MNRatio_start = float(peak_MNRatio[class_iter] - peak_tolerance[class_iter] / 2.0)
-                    MNRatio_end = float(peak_MNRatio[class_iter] + peak_tolerance[class_iter] / 2.0)
+                    MNRatio_start = float(peak_MNRatio[class_iter] - peak_width[class_iter] / 2.0)
+                    MNRatio_end = float(peak_MNRatio[class_iter] + peak_width[class_iter] / 2.0)
                     dict_sub_df[class_iter] = self.df_apt[self.df_apt["MN_Ratio"].between(MNRatio_start, MNRatio_end)]
                     num_bins = int(reciprocal_bins * (MNRatio_end - MNRatio_start))
                     bin_intervels = np.linspace(MNRatio_start, MNRatio_end, num_bins)
@@ -3096,7 +3136,7 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                             for key in cutoff_dict_array:
                                 if cutoff_dict_array[key]['peak_MNRatio'] is not None:
                                     if float(cutoff_dict_array[key]['peak_MNRatio']) == float(peak_input):
-                                        tolerance = float(cutoff_dict_array[key]['peak_tolerance'])
+                                        tolerance = float(cutoff_dict_array[key]['peak_width'])
                                         cutoff_bin = float(cutoff_dict_array[key]['cutoff_bin'])
                                         break
 
@@ -3137,7 +3177,7 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                         columns=['bin_lower', 'bin_upper', 'freq', 'Range_Cutoff_H_Value',
                                  'Range_Cutoff_W_Value', 'subgroup', 'subgroup_freq',
                                  'cutoff_height_status', 'cutoff_height_width_status',
-                                 'peak_tolerance', 'cutoff_bin', 'cutoff_height',
+                                 'peak_width', 'cutoff_bin', 'cutoff_height',
                                  'cutoff_width', 'peak_id'])
 
                 df_peak_min_max_count = pd.DataFrame(columns=['peak_id', 'min_MN', 'max_MN', 'peak_max_cutoff_width'])
@@ -3163,7 +3203,7 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                 self.df_el['ION'] = self.df_el.apply(lambda row: change_ion_name(row), axis=1)
                 self.df_apt_final['ION'] = self.df_apt_final.apply(lambda row: change_ion_name(row), axis=1)
 
-                self.df_el = self.df_el.drop(columns=['ion', 'num', 'charge', 'peak_tolerance',
+                self.df_el = self.df_el.drop(columns=['ion', 'num', 'charge', 'peak_width',
                                                       'cutoff_bin', 'cutoff_height', 'cutoff_width'])
                 cols = ['ION', 'mass', 'peak_MNRatio', 'peak_id', 'peak_max_cutoff_width', 'XYZ_total_count']
                 self.df_el = self.df_el[cols]
@@ -3171,9 +3211,9 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                 self.completed = 100
                 self.progressBar.setValue(self.completed)
 
-                self.pushButton_7.setEnabled(True)
-                self.pushButton_8.setEnabled(True)
-                self.pushButton_5.setEnabled(True)
+                self.btn_view_peak_df.setEnabled(True)
+                self.btn_view_final_df.setEnabled(True)
+                self.btn_export_hdf.setEnabled(True)
 
 # For confirmation on closing the window
 # def closeEvent(self, event):
