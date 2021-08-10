@@ -170,7 +170,7 @@
                </property>
                <layout class="QGridLayout" name="gridLayout_7">
                 <item row="0" column="0">
-                 <widget class="QPushButton" name="pushButton_2">
+                 <widget class="QPushButton" name="btn_plot_hist">
                   <property name="maximumSize">
                    <size>
                     <width>200</width>
@@ -240,7 +240,7 @@
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="2" column="0">
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="btn_view_df">
                <property name="maximumSize">
                 <size>
                  <width>200</width>
@@ -256,7 +256,7 @@
               </widget>
              </item>
              <item row="4" column="0">
-              <widget class="QPushButton" name="pushButton_4">
+              <widget class="QPushButton" name="btn_start_bin">
                <property name="maximumSize">
                 <size>
                  <width>200</width>
@@ -272,7 +272,7 @@
               </widget>
              </item>
              <item row="5" column="0">
-              <widget class="QPushButton" name="pushButton_7">
+              <widget class="QPushButton" name="btn_view_peak_df">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -288,7 +288,7 @@
               </widget>
              </item>
              <item row="6" column="0">
-              <widget class="QPushButton" name="pushButton_8">
+              <widget class="QPushButton" name="btn_view_final_df">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -304,7 +304,7 @@
               </widget>
              </item>
              <item row="7" column="0">
-              <widget class="QPushButton" name="pushButton_5">
+              <widget class="QPushButton" name="btn_export_hdf">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -320,7 +320,7 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QPushButton" name="pushButton_3">
+              <widget class="QPushButton" name="btn_input_elem">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -354,7 +354,7 @@
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
                 <item row="0" column="0">
-                 <widget class="QPushButton" name="pushButton_6">
+                 <widget class="QPushButton" name="btn_exit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>0</horstretch>

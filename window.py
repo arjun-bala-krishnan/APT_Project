@@ -2594,6 +2594,8 @@ class CompositionMapDialog(Ui_CompositionMap.Ui_Dialog, QDialog):
                     if index in dict_apt_neighbour['index']:
                         temp_df = pd.DataFrame.from_dict(dict_apt_neighbour, orient='columns')
                         cluster_id_prev = temp_df.loc[temp_df['index'] == index, 'cluster_id'].values[0]
+
+
                         temp_df_true_centres = temp_df[temp_df['cluster_centre'] == True]
                         temp_df_true_centres_id = temp_df_true_centres[
                             temp_df_true_centres['cluster_id'] == cluster_id_prev]
