@@ -24,3 +24,5 @@ When making changes to the APTMainWindow, make sure to change the final line in 
 inside the PeriodicTable.py file. on line 148 (under hydrogen)
 
 This is unfortunately not a good practice. We will address this later on. 
+
+4) The layout of program can be found here -> https://lucid.app/lucidchart/invitations/accept/inv_a7188861-9be7-4dd1-b891-becb5dd15c96?viewport_loc=-1175%2C-177%2C4039%2C1940%2C0_0
