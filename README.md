@@ -6,6 +6,8 @@ The project is a python (PyQt) application for analyzing APT data. It has the fo
 5.	It can find the GM-SRO parameter of the data among two species (or collection) of ions. The methodology is based on the literature cited in the reference. The output is a graph across shells surrounding the atoms.
 6.	It can extract and plot a composition part using a mix of critical radius and nearest neighbor list.
 
+The overall layout of the app (in pdf) can be found here: https://lucid.app/publicSegments/view/58b4e436-3c84-47e1-97a0-401c73a01cbc
+
 The project is still under development. Anybody wishing to contribute can contact me directly. In the future, we will be primarily looking into optimizing the thread-safety, voxelizing data, and a better visualizing tool rather than matplotlib (which is very slow for such large data). I developed the project under Prof Tong Li with support from Ruhr University Bochum. 
 
 References:
