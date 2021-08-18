@@ -7,8 +7,15 @@ The project is a python (PyQt) application for analyzing APT data. It has the fo
 6.	It can extract and plot a composition part using a mix of critical radius and nearest neighbor list.
 
 The overall layout of the app (in pdf) can be found here: https://lucid.app/publicSegments/view/58b4e436-3c84-47e1-97a0-401c73a01cbc
+The brainstorming area (supported by lucidchart app) is found here: https://lucid.app/lucidspark/invitations/accept/inv_1b4ab88e-b920-46f0-8582-b000e18120a2
+The collaborators will be given a different link so that they can view and edit the document
 
-The project is still under development. Anybody wishing to contribute can contact me directly. In the future, we will be primarily looking into optimizing the thread-safety, voxelizing data, and a better visualizing tool rather than matplotlib (which is very slow for such large data). I developed the project under Prof Tong Li with support from Ruhr University Bochum. 
+To install:
+1.	Use any python IDE that supports python3 and install the library files given in requirements.txt
+2.	It is safe to set up a custom environment for a new project
+3.	Run the program as usual 
+
+The project is still under development. Anybody wishing to contribute can contact me directly. In the future, we will be primarily looking into optimizing the thread-safety, voxelizing data, writing a unittest file, and a better visualizing tool rather than matplotlib (which is very slow for such large data). I developed the project under Prof Tong Li with support from Ruhr University Bochum. 
 
 References:
 1.	Anna V. Ceguerra , Michael P. Moody , Leigh T. Stephenson , Ross K.W. Marceau & Simon P. Ringer (2010) A three-dimensional Markov field approach for the analysis of atomic clustering in atom probe data, Philosophical Magazine, 90:12, 1657-1683, DOI: 10.1080/14786430903441475
