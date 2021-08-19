@@ -1,4 +1,7 @@
-The project is a python (PyQt) application for analyzing APT data. It has the following functionalities.
+# APT Analyzer
+
+This is python (PyQt) GUI application for analyzing APT data. It has the following functionalities.
+
 1.	The application helps map the peaks of Atom Probe Tomography data with additional controls over binning and peak resizing. 
 2.	One can export the binned file and do additional analysis in other software that supports the HDF format.
 3.	It can find out the dimensions of monolayers within the data using a graphical visualization tool that can do binning along any direction. The ions in the monolayers can be extracted as a doc file, with or without decomposition.
@@ -10,7 +13,8 @@ The overall layout of the app (in pdf) can be found here: https://lucid.app/publ
 The brainstorming area (supported by lucidchart app) is found here: https://lucid.app/lucidspark/invitations/accept/inv_1b4ab88e-b920-46f0-8582-b000e18120a2
 The collaborators will be given a different link so that they can view and edit the document
 
-To install:
+Installation
+
 1.	Use any python IDE that supports python3 and install the library files given in requirements.txt
 2.	It is safe to set up a custom environment for a new project
 3.	Run the program as usual 
