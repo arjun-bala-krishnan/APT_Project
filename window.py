@@ -35,6 +35,8 @@ from scipy import special
 from scipy.signal import savgol_filter
 from scipy.spatial import ConvexHull, Delaunay
 from silx.gui.widgets.PeriodicTable import PeriodicTable
+# Remember that the above non-project library file was hard edited to add D to the periodic table
+# This is a really bad practice, and needs to be changed. The git repository wont reflect this addition for example
 from sklearn.cluster import DBSCAN
 from sklearn.neighbors import KDTree
 
@@ -2595,7 +2597,6 @@ class CompositionMapDialog(Ui_CompositionMap.Ui_Dialog, QDialog):
                         temp_df = pd.DataFrame.from_dict(dict_apt_neighbour, orient='columns')
                         cluster_id_prev = temp_df.loc[temp_df['index'] == index, 'cluster_id'].values[0]
 
-
                         temp_df_true_centres = temp_df[temp_df['cluster_centre'] == True]
                         temp_df_true_centres_id = temp_df_true_centres[
                             temp_df_true_centres['cluster_id'] == cluster_id_prev]
@@ -3035,8 +3036,8 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                     MNRatio_end = float(peak_MNRatio[class_iter] + peak_width[class_iter] / 2.0)
                     dict_sub_df[class_iter] = self.df_apt[self.df_apt["MN_Ratio"].between(MNRatio_start, MNRatio_end)]
                     num_bins = int(reciprocal_bins * (MNRatio_end - MNRatio_start))
-                    bin_intervels = np.linspace(MNRatio_start, MNRatio_end, num_bins)
-                    freq, bins = np.histogram(dict_sub_df[class_iter]["MN_Ratio"], bins=bin_intervels)
+                    bin_intervals = np.linspace(MNRatio_start, MNRatio_end, num_bins)
+                    freq, bins = np.histogram(dict_sub_df[class_iter]["MN_Ratio"], bins=bin_intervals)
 
                     def truncate(f, n):
                         return math.floor(f * 10 ** n) / 10 ** n
@@ -3182,6 +3183,8 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                                  'peak_width', 'cutoff_bin', 'cutoff_height',
                                  'cutoff_width', 'peak_id'])
 
+                    self.df_apt_final.groupby('peak_no')
+
                 df_peak_min_max_count = pd.DataFrame(columns=['peak_id', 'min_MN', 'max_MN', 'peak_max_cutoff_width'])
                 for key in dict_peak_min_max_count.keys():
                     df_peak_min_max_count = df_peak_min_max_count.append(
@@ -3205,6 +3208,15 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                 self.df_el['ION'] = self.df_el.apply(lambda row: change_ion_name(row), axis=1)
                 self.df_apt_final['ION'] = self.df_apt_final.apply(lambda row: change_ion_name(row), axis=1)
 
+                df_temp = self.df_apt_final.groupby('peak_no')['MN_Ratio']
+                df_temp2 = self.df_apt_final.assign(min_MN_Ratio=df_temp.transform(min),
+                                                    max_MN_Ratio=df_temp.transform(max))
+                df_MNRatio_Table = df_temp2.groupby('ION').mean().reset_index()
+                df_MNRatio_Table = df_MNRatio_Table.drop(columns=['peak_max_cutoff_width', 'XYZ_total_count'])
+                df_MNRatio_Table = df_MNRatio_Table.sort_values(by=['min_MN_Ratio'], ignore_index=True)
+
+                print(df_MNRatio_Table)
+
                 self.df_el = self.df_el.drop(columns=['ion', 'num', 'charge', 'peak_width',
                                                       'cutoff_bin', 'cutoff_height', 'cutoff_width'])
                 cols = ['ION', 'mass', 'peak_MNRatio', 'peak_id', 'peak_max_cutoff_width', 'XYZ_total_count']
@@ -3216,21 +3228,3 @@ class MainWindow(Ui_APTMainWindow.Ui_MainWindow, QMainWindow):
                 self.btn_view_peak_df.setEnabled(True)
                 self.btn_view_final_df.setEnabled(True)
                 self.btn_export_hdf.setEnabled(True)
-
-# For confirmation on closing the window
-# def closeEvent(self, event):
-#     reply = QMessageBox.question(self, 'Window Close', 'Are you sure you want to close the window?',
-#                                  QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-#
-#     if reply == QMessageBox.Yes:
-#         event.accept()
-#         print('Window closed')
-#     else:
-#         event.ignore()
-
-# For converting into JSON and back
-# df_apt_non_layer.to_json(
-#     r'C:\Users\arjun\Downloads\APT_Code\APT_Project\df_apt_non_layer.json', orient='split')
-
-# df_apt_non_layer = pd.read_json(r'C:\Users\arjun\Downloads\APT_Code\APT_Project\df_apt_non_layer.json',
-#                                 orient='split')

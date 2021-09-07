@@ -229,3 +229,23 @@ def show_message(message, btn1=False, btn1_name="Button1", btn1_fun=lambda: None
 #         scale = 1.1
 #         zp.zoom_factory(self.axes, base_scale=scale)
 #         self.fig.tight_layout()
+
+
+
+# For confirmation on closing the window
+# def closeEvent(self, event):
+#     reply = QMessageBox.question(self, 'Window Close', 'Are you sure you want to close the window?',
+#                                  QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+#
+#     if reply == QMessageBox.Yes:
+#         event.accept()
+#         print('Window closed')
+#     else:
+#         event.ignore()
+
+# For converting into JSON and back
+# df_apt_non_layer.to_json(
+#     r'C:\Users\arjun\Downloads\APT_Code\APT_Project\df_apt_non_layer.json', orient='split')
+
+# df_apt_non_layer = pd.read_json(r'C:\Users\arjun\Downloads\APT_Code\APT_Project\df_apt_non_layer.json',
+#                                 orient='split')
