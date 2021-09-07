@@ -17,3 +17,12 @@ When making changes to the APTMainWindow, make sure to change the final line in 
 2) command to convert qrc files to py files (already created. Only needed if there is a new logo): pyrcc5 UI\UI_APTMainWindow_Images.qrc -o images_main_rc.py
 
 
+3) Remember that so far, for the periodic table, we are using a library file "from silx.gui.widgets.PeriodicTable import PeriodicTable". location is "C:\..\venv\Lib\site-packages\silx\gui\widgets\PeriodicTable.py". This non-project file was edited to add a single line that makes sure Deuterium (D) is present in the periodic table (since we need this frequently). So for the time being add the following line:
+
+("D", 1, 2, 1, "Deuterium", 2.0140, "Hydrogen isotope"),
+
+inside the PeriodicTable.py file. on line 148 (under hydrogen)
+
+This is unfortunately not a good practice. We will address this later on. 
+
+4) The layout of program can be found here -> https://lucid.app/lucidchart/invitations/accept/inv_a7188861-9be7-4dd1-b891-becb5dd15c96?viewport_loc=-1175%2C-177%2C4039%2C1940%2C0_0
